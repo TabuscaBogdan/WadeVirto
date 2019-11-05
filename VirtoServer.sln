@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtoServer", "VirtoServer\VirtoServer.csproj", "{E336A844-37CC-4572-9656-03A1A9C61D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{834A89DC-D304-4C43-9067-D6A8E8559913}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E336A844-37CC-4572-9656-03A1A9C61D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E336A844-37CC-4572-9656-03A1A9C61D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E336A844-37CC-4572-9656-03A1A9C61D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E336A844-37CC-4572-9656-03A1A9C61D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{834A89DC-D304-4C43-9067-D6A8E8559913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{834A89DC-D304-4C43-9067-D6A8E8559913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{834A89DC-D304-4C43-9067-D6A8E8559913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{834A89DC-D304-4C43-9067-D6A8E8559913}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0162B767-78CC-44D4-BC7A-5D7F56CFE0C7}
+	EndGlobalSection
+EndGlobal
