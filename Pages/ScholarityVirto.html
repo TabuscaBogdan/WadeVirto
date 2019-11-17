@@ -66,9 +66,36 @@
 
             <section id="DataFlow">
                 <h2>Server Data Flow</h2>
-                <p>
-
-                </p>
+                <section id="WebServer">
+                    <h3><span>1.</span>.Net Core Web Server</h3>
+                    <p>
+                        The visual part of the application will be handled by a MVC server written in .NET Core. This part
+                        will be responsible with delivering the web pages, scripts, forms and more to the end user. Furthermore
+                        the server will also handle the authentication part for users that only register with an account made
+                        specifically for the use of the online tool. For users who chose to log in with another account, such as
+                        a google account or facebook, the server will only check for the user's validation token, before
+                        processing the request. The last main job of the web server will be to collect user inputs, organise
+                        them and then make specific calls to the necessary end points exposed by a Python Processing Server.
+                        Once the awaited response arrives the web server will pass it to the user in a more readable and
+                        understandable manner and once the user decides to save his or her playlist, the changes will be
+                        recorded in a NoSQL Database available to the server in a RDF compatible format.
+                        Note:The changes saved by an user will influence further search results in the selected playlist.
+                    </p>
+                </section>
+                <section id="PythonProcessorServer">
+                    <h3><span>2.</span>Python Processor Server</h3>
+                    <p>
+                        The main part of the online tool is that of the processor server. Here end points are exposed for
+                        the web server to access. Data received on those end points will be processed from natural language
+                        into machine data and a list of search patterns will be formed. The server will then proceed to
+                        further call upon SPARQL endpoints to gather data based on the search parameters given. Once the
+                        queries have returned the data, the python application will then proceed to comb through for
+                        the most relevant information based on the context given and then package that data to be sent
+                        back to the web server.
+                        Note: Due to the high amount of strain and the long duration of the SPARQL search querries this
+                        server will likely be replicated.
+                    </p>
+                </section>
             </section>
 
             <section id="Technology">
