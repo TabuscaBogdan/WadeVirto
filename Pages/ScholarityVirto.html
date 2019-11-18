@@ -22,6 +22,35 @@
                     about the record's authors, genera, type, history and associations.
                 </p>
             </section>
+
+            <section>
+                <h2>Introduction</h2>
+                <p>
+                    In today's society the main contact people have with music is through radio, media, and social
+                    media too some extent. People usually listen to what is popular at the moment and to what their
+                    friends think is popular. This as one can imagine has lead up to a stagnation in music culture,
+                    not because new and interesting songs aren't made, in fact more songs than ever appear every day
+                    but the range of musical repertoire an average person listen's to has shrunk considerably. Many
+                    people nowadays listen to music via an online streaming service like Spotify or YouTube. These
+                    platforms alleviate the problem somewhat by introducing recommendation algorithms that open up
+                    users to other new songs and artists, yet sadly these algorithms are sometimes hit or miss
+                    because the recommendations are given based on what the streaming service thinks you want to
+                    listen to and not on what you would like to listen too.
+                </p>
+                <p>
+                    This online tool is aimed at enlarging the musical repertoire of a person by giving him or her
+                    recommendations on music, yet unlike a streaming service's algorithm that bases its suggestions
+                    only on your previous search history, this web application will search for new music based on
+                    likes and wants directly specified by the end user while taking into consideration his or hers
+                    previous music selection.
+                </p>
+                <p>
+                    The rest of this document will be aimed at describing the application both from a user's point of
+                    view, as well as provide implementation details useful to developers that would want to manage
+                    or expand the online tool.
+                </p>
+            </section>
+
             <section id="User-flow">
                 <h2>User flow</h2>
                 <p>
@@ -92,18 +121,66 @@
                         queries have returned the data, the python application will then proceed to comb through for
                         the most relevant information based on the context given and then package that data to be sent
                         back to the web server.
-                        Note: Due to the high amount of strain and the long duration of the SPARQL search querries this
+                        Note: Due to the high amount of strain and the long duration of the SPARQL search queries this
                         server will likely be replicated.
                     </p>
                 </section>
             </section>
 
-            <section id="Technology">
-                <h2>Technology Used</h2>
+            <section id="Models">
+                <h2>Data Models</h2>
                 <p>
-
+                    In this application we hope to use the RDF data format for storing our data about different tracks that were
+                    stored in a playlist. While the playlist itself will be structured as standard json data in our database, the
+                    information and the tracks themselves contained within the list will be stored using a JSON-LD format provided
+                    by <a  href="http://musicontology.com/docs/getting-started.html">Music Ontology Site</a>. This format will
+                    help us store and pass data in a much more convenient manner.<br>
+                    Example of a song model in JSON-LD:
+                    <pre>
+                    <code>
+{
+  "@id": "http://example.org/#track1",
+  "@type": "mo:Track",
+  "dc:title": "Turnover",
+  "foaf:maker": {
+    "@id": "http://musicbrainz.org/artist/233fc3f3-6de2-465c-985e-e721dbabbace#_",
+    "@type": "mo:MusicGroup",
+    "foaf:name": "Fugazi"
+  }
+}
+                    </code>
+                    </pre>
                 </p>
             </section>
+            <section id="Technology">
+                <h2>Technology Used</h2>
+                <section id=".NetCore">
+                    <h3><span>1.</span>C# Core Technology</h3>
+                    <p>
+                        The decision to use the .Net Core technology was made based on the following points:
+                        <ul>
+                            <li>Able to handle a large number of requests.</li>
+                            <li>Ease of content publication.</li>
+                            <li>The ability to run on any machine.</li>
+                            <li>Ease integration with databases & cloud services.</li>
+                        </ul>
+                    </p>
+                </section>
+                <section id="Python">
+                    <h3><span>1.</span>C# Core Technology</h3>
+                    <p>
+                        The decision to use the Python for the processor server was made based on the following points:
+                    <ul>
+                        <li>Ease and efficiency of the python language regarding text based manipulation.</li>
+                        <li>Native json support for data packaging.</li>
+                        <li>The ability to run on any machine.</li>
+                        <li>Ease of use.</li>
+                    </ul>
+                    </p>
+                </section>
+
+            </section>
+            <br>
 
         </section>
     </div>
