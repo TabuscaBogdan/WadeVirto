@@ -13,19 +13,6 @@ namespace VirtoServer.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        // GET: api/Authentication
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Authentication/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         /// <summary>
         /// An endpoint for registering new users.
@@ -52,15 +39,36 @@ namespace VirtoServer.Controllers
             return token;
         }
 
-        // PUT: api/Authentication/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <summary>
+        /// An endpoint for logging in users.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// Post /Register
+        /// {
+        ///   "Email":"someEmail@email.com,
+        ///   "Password":"Password"
+        /// }
+        /// </remarks>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
+        [HttpPost("[action]")]
+        public LoginTokenModel Login([FromBody] JObject credentials)
         {
+            var parameters = credentials.ToObject<Dictionary<string, string>>();
+            var token = new LoginTokenModel
+            {
+                Token = "OK",
+                Timestamp = DateTime.Now
+            };
+            return token;
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        /// <summary>
+        /// An endpoint for logging out users.
+        /// </summary>
+        [HttpDelete("[action]")]
+        public void Logout(LoginTokenModel token)
         {
         }
     }
