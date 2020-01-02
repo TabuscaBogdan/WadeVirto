@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using VirtoServer.Models;
+using UserDataManager;
+using System.Threading.Tasks;
 
 namespace VirtoServer.Controllers
 {
@@ -21,16 +20,17 @@ namespace VirtoServer.Controllers
         /// Sample request:
         /// Post /Register
         /// {
-        ///   "Email":"someEmail@email.com,
-        ///   "Password":"Password"
+        ///   Email: 'someEmail@email.com',
+        ///   Password: 'Password'
         /// }
         /// </remarks>
         /// <param name="credentials"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public LoginTokenModel Register([FromBody] JObject credentials)
+        public LoginTokenModel Registration([FromBody] JObject credentials)
         {
             var parameters = credentials.ToObject<Dictionary<string, string>>();
+            var registered = Program.database.RegisterUser(parameters["Email"], parameters["Password"]).Result;
             var token = new LoginTokenModel
             {
                 Token = "OK",

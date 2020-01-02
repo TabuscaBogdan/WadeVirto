@@ -20,4 +20,8 @@
     <Folder Include="OpenAPISpec\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UserDataManager\UserDataManager.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,19 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using UserDataManager;
 
 namespace VirtoServer
 {
     public class Program
     {
+        public static DatabaseManager database;
         public static void Main(string[] args)
         {
+            try
+            {
+                database = DatabaseManager.Instance;
+            }
+            catch (Exception e)
+            {
+                database = new DatabaseManager();
+            }
             CreateWebHostBuilder(args).Build().Run();
         }
 
