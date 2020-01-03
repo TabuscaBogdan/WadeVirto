@@ -13,11 +13,19 @@ namespace UserDataManager
         private static IFirebaseClient client = null;
         private static readonly object padlock = new object();
         private static readonly string userPath = "Users/";
+        private static readonly string userCount = "UserCount";
 
         public DatabaseManager()
         {
             var connector = new Connection();
             client = connector.SetupClient();
+        }
+        private string BadCharacterTrim(string value)
+        {
+            value = value.Replace("\"", "");
+            value = value.Replace(".", "");
+            value = value.Replace("@", "");
+            return value;
         }
 
         public static DatabaseManager Instance
@@ -35,11 +43,18 @@ namespace UserDataManager
 
         public async Task<bool> RegisterUser(string email, string password)
         {
+            var username = email.Split("@")[0];
+            email = BadCharacterTrim(email);
+            password = BadCharacterTrim(password);
+
+            
+
             FirebaseResponse response = await client.GetAsync(userPath+email);
             if(response.Body=="null")
             {
-                SetResponse setResponse = await client.SetAsync($"{userPath}{email}/Password",password);
-                var result = setResponse.ResultAs<string>();
+                SetResponse userSetResponse = await client.SetAsync($"{userPath}{email}/Username", username);
+                SetResponse passSetResponse = await client.SetAsync($"{userPath}{email}/Password",password);
+                var result = passSetResponse.ResultAs<string>();
 
                 if(result!=null)
                 {
@@ -48,6 +63,21 @@ namespace UserDataManager
             }
             return false;
 
+        }
+
+        public async Task<bool> LoginUser(string email, string password)
+        {
+            email = BadCharacterTrim(email);
+            password = BadCharacterTrim(password);
+
+            FirebaseResponse response = await client.GetAsync($"{userPath}{email}/Password");
+            if(response.Body!="null")
+            {
+                var dbPass = BadCharacterTrim(response.Body);
+                if (password.Equals(dbPass))
+                    return true;
+            }
+            return false;
         }
     }
 }

@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using VirtoServer.Models;
 using UserDataManager;
 using System.Threading.Tasks;
+using VirtoServer.Services;
 
 namespace VirtoServer.Controllers
 {
@@ -31,11 +32,8 @@ namespace VirtoServer.Controllers
         {
             var parameters = credentials.ToObject<Dictionary<string, string>>();
             var registered = Program.database.RegisterUser(parameters["Email"], parameters["Password"]).Result;
-            var token = new LoginTokenModel
-            {
-                Token = "OK",
-                Timestamp = DateTime.Now
-            };
+            var token = CredentialKeeper.GenerateLoginToken();
+            CredentialKeeper.AddTokenToCache(token, parameters["Email"]);
             return token;
         }
 
@@ -46,7 +44,7 @@ namespace VirtoServer.Controllers
         /// Sample request:
         /// Post /Register
         /// {
-        ///   "Email":"someEmail@email.com,
+        ///   Email:"someEmail@email.com,
         ///   "Password":"Password"
         /// }
         /// </remarks>
@@ -56,12 +54,13 @@ namespace VirtoServer.Controllers
         public LoginTokenModel Login([FromBody] JObject credentials)
         {
             var parameters = credentials.ToObject<Dictionary<string, string>>();
-            var token = new LoginTokenModel
+            if(Program.database.LoginUser(parameters["Email"],parameters["Password"]).Result)
             {
-                Token = "OK",
-                Timestamp = DateTime.Now
-            };
-            return token;
+                var token = CredentialKeeper.GenerateLoginToken();
+                CredentialKeeper.AddTokenToCache(token, parameters["Email"]);
+                return token;
+            }
+            return new LoginTokenModel { Token = "Login failed!", Timestamp = DateTime.Now };
         }
 
         /// <summary>
@@ -70,6 +69,7 @@ namespace VirtoServer.Controllers
         [HttpDelete("[action]")]
         public void Logout(LoginTokenModel token)
         {
+            CredentialKeeper.RemoveToken(token);
         }
     }
 }
