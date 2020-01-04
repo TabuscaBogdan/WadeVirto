@@ -63,6 +63,7 @@ namespace VirtoServer.Controllers
             return new LoginTokenModel { Token = "Login failed!", Timestamp = DateTime.Now };
         }
 
+
         /// <summary>
         /// An endpoint for logging out users.
         /// </summary>

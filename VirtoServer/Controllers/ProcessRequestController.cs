@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserDataManager.DbObjects;
 using VirtoServer.Models;
+using VirtoServer.Services;
 
 namespace VirtoServer.Controllers
 {
@@ -23,6 +25,26 @@ namespace VirtoServer.Controllers
                 Loaded = false,
                 ServerName = "Python Processing server 1"
             };
+        }
+
+        [HttpPost("[action]")]
+        public bool Songs(string token, DateTime tokenTime, SongList songs)
+        {
+            string email;
+            var loginToken = new LoginTokenModel
+            {
+                Token = token,
+                Timestamp = tokenTime
+            };
+            if (CredentialKeeper.IsTokenCached(loginToken))
+            {
+                email = CredentialKeeper.GetTokenUser(loginToken);
+                var result = Program.database.SaveList(email, songs).Result;
+                return result;
+            }
+            else
+                return false;
+            
         }
 
         /// <summary>

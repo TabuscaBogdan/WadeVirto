@@ -16,7 +16,7 @@ namespace VirtoServer.Services
             var token = new LoginTokenModel
             {
                 Token = guid.ToString(),
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.Now
             };
             return token;
         }
@@ -28,19 +28,25 @@ namespace VirtoServer.Services
 
         public static bool IsTokenCached(LoginTokenModel token)
         {
-            if (loginCache.Keys.Contains(token))
-                return true;
+            foreach (var tk in loginCache.Keys)
+                if(tk.Token == token.Token)
+                    return true;
             return false;
         }
 
         public static string GetTokenUser(LoginTokenModel token)
         {
-            return loginCache[token];
+            foreach (var tk in loginCache.Keys)
+                if (tk.Token == token.Token)
+                    return loginCache[tk];
+            return null;
         }
 
         public static void RemoveToken(LoginTokenModel token)
         {
-            loginCache.Remove(token);
+            foreach (var tk in loginCache.Keys)
+                if (tk.Token == token.Token)
+                    loginCache.Remove(tk);
         }
     }
 }

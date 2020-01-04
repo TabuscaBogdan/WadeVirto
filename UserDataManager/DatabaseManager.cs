@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using UserDataManager.DbObjects;
 
 namespace UserDataManager
 {
@@ -77,6 +78,16 @@ namespace UserDataManager
                 if (password.Equals(dbPass))
                     return true;
             }
+            return false;
+        }
+
+        public async Task<bool> SaveList(string email, SongList songs)
+        {
+            email = BadCharacterTrim(email);
+            SetResponse setResponse = await client.SetAsync($"{userPath}{email}/Lists/{songs.ListName}", songs);
+            var result = setResponse.ResultAs<SongList>();
+            if(result!=null)
+                return true;
             return false;
         }
     }

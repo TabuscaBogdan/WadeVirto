@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VirtoServer.Models
+namespace UserDataManager.DbObjects
 {
-    public class JsonLDMaker
+    public class JsonLDSong
     {
         public string id { get; set; }
         public string type { get; set; }
-        public string foafName { get; set; }
+        public string dcTitle { get; set; }
+        public JsonLDMaker foafMaker { get; set; }
     }
 }
