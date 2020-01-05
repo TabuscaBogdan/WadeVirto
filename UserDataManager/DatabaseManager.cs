@@ -90,5 +90,13 @@ namespace UserDataManager
                 return true;
             return false;
         }
+
+        public async Task<Dictionary<string,SongList>> GetLists(string email)
+        {
+            email = BadCharacterTrim(email);
+            FirebaseResponse response = await client.GetAsync($"{userPath}{email}/Lists");
+            var result = response.ResultAs<Dictionary<string, SongList>>();
+            return result;
+        }
     }
 }
