@@ -17,7 +17,7 @@ namespace VirtoServer.Controllers
     public class ProcessRequestController : ControllerBase
     {
 
-        private readonly string processingServerAddress = "http://localhost:";
+        private readonly string processingServerAddress = "https://localhost:44310/";
         /// <summary>
         /// An endpoint for checking the availability of the processing server.
         /// </summary>
@@ -85,7 +85,7 @@ namespace VirtoServer.Controllers
                 using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(processingServerAddress);
-                    var processTask = client.PostAsJsonAsync<string>("SongRequest", request);
+                    var processTask = client.PostAsJsonAsync<string>("api/Processing/SeekSongs", request);
                     processTask.Wait();
                     var result = processTask.Result;
                     if(result.IsSuccessStatusCode)
@@ -93,6 +93,7 @@ namespace VirtoServer.Controllers
                         var readTask = result.Content.ReadAsAsync<List<JsonLDSong>>();
                         readTask.Wait();
                         var songs = readTask.Result;
+                        return songs;
                     }
                     return new List<JsonLDSong>();
                 }
