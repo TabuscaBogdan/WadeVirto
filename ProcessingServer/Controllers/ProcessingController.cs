@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProcessingServer.Models;
+using ProcessingServer.Services;
 
 namespace ProcessingServer.Controllers
 {
@@ -28,7 +29,10 @@ namespace ProcessingServer.Controllers
                     foafName = "Fugazi"
                 }
             };
+            var preferencesTask = NaturalLanguageProcessor.InterpretPreferences(request).GetAwaiter().GetResult();
             songs.Add(song1);
+
+            
             return songs;
         }
     }
