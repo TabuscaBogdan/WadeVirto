@@ -38,6 +38,21 @@ namespace ProcessingServer.Services
             return false;
         }
 
+        private static bool CheckDislike(int index, string text)
+        {
+            var preIndexText = text.Substring(0, index);
+            var preWordText = preIndexText.Split(" ");
+            int len = preWordText.Length;
+            int i = 1;
+            while (i<=3 && len-i>=0)
+            {
+                if (DislikeWords.Contains(preWordText[len - i]))
+                    return true;
+                i++;
+            }
+            return false;
+        }
+
         private static string NameChecks(int index, string[] words, ref int wordNameCounts)
         {
             string word = words[index];
@@ -102,14 +117,10 @@ namespace ProcessingServer.Services
                 if (text.Contains(genre))
                 {
                     int finding = text.IndexOf(genre);
-                    //TODO index in words is not the same as index in text
-
-                    if(CheckDislike(finding,words))
+                    if(CheckDislike(finding, text))
                         preferences["!LikeMusicTypes"].Add(genre);
                     else
-                    {
                         preferences["LikeMusicTypes"].Add(genre);
-                    }
                 }
             }
 
