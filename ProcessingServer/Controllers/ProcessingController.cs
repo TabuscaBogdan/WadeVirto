@@ -50,6 +50,12 @@ namespace ProcessingServer.Controllers
                 }
             };
             var preferencesTask = NaturalLanguageProcessor.InterpretPreferences(request).GetAwaiter().GetResult();
+
+            //TODO Work on this interogator!!!
+            var sparqlInterogator = new SPARQLInterogator();
+
+            var artists = sparqlInterogator.GetArtistInfo(preferencesTask["LikeArtist"]);
+
             songs.Add(song1);
 
             
