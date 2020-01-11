@@ -76,6 +76,7 @@ namespace ProcessingServer.Services
                                 
                                 name = name + " " + RemovePunctuation(words[index + nameWCount]);
                                 wordNameCounts = nameWCount;
+                                nameWCount += 1;
                                 if (punctuation == true)
                                     return name;
                             }

@@ -46,7 +46,8 @@ namespace ProcessingServer.Controllers
                 {
                     id = "http://musicbrainz.org/artist/233fc3f3-6de2-465c-985e-e721dbabbace#_",
                     type = "mo:MusicGroup",
-                    foafName = "Fugazi"
+                    foafName = "Fugazi",
+                    description = "Cool AF Boi!"
                 }
             };
             var preferencesTask = NaturalLanguageProcessor.InterpretPreferences(request).GetAwaiter().GetResult();
@@ -54,8 +55,14 @@ namespace ProcessingServer.Controllers
             //TODO Work on this interogator!!!
             var sparqlInterogator = new SPARQLInterogator();
 
-            var artists = sparqlInterogator.GetArtistInfo(preferencesTask["LikeArtist"]);
+            var artists = sparqlInterogator.GetArtistLinks(preferencesTask["LikeArtist"]);
+            foreach(var artistLink in artists)
+            {
+                var info = sparqlInterogator.GetArtistInformation(artistLink);
+                var maker = sparqlInterogator.ExtractArtistMakerInformation(info);
+            }
 
+            var trackInfo = sparqlInterogator.GetTrackInformation("http://dbtune.org/musicbrainz/resource/track/ae9c96ed-1e5f-49fb-86f0-0cf4df72dddc");
             songs.Add(song1);
 
             

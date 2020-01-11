@@ -10,6 +10,7 @@ namespace ProcessingServer.Models
         public string id { get; set; }
         public string type { get; set; }
         public string dcTitle { get; set; }
+        public int length { get; set; }
         public JsonLDMaker foafMaker { get; set; }
     }
 }

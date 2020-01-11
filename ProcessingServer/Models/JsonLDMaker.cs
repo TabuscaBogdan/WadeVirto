@@ -10,5 +10,6 @@ namespace ProcessingServer.Models
         public string id { get; set; }
         public string type { get; set; }
         public string foafName { get; set; }
+        public string description { get; set; }
     }
 }
