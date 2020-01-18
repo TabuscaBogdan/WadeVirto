@@ -97,7 +97,6 @@ namespace ProcessingServer.Services
             preferences.Add("LikeMusicTypes",new List<string>());
             preferences.Add("!LikeArtist",new List<string>());
             preferences.Add("LikeArtist",new List<string>());
-            preferences.Add("LikeSong",new List<string>());
 
             for (int index = 0; index < words.Length; index++)
             {

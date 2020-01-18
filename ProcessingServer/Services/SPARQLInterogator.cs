@@ -84,6 +84,19 @@ namespace ProcessingServer.Services
         }
 
 
+        public List<string> ExtractArtistLinks(List<Triple> informationLines)
+        {
+            var artistLinks = new List<string>();
+            foreach (var infoTriple in informationLines)
+            {
+                if (infoTriple.IsValueOf != null)
+                    if (infoTriple.IsValueOf.Contains("/artist/"))
+                        artistLinks.Add(infoTriple.IsValueOf);
+            }
+            return artistLinks;
+        }
+
+
         public List<string> GetArtistLinks(List<string> artists)
         {
             var artistLinks = new List<string>();
@@ -155,15 +168,15 @@ namespace ProcessingServer.Services
 
         public List<string> ExtractTrackLinks(List<Triple> informationLines)
         {
-            var artistLinks = new List<string>();
+            var trackLinks = new List<string>();
 
             foreach(var infoTriple in informationLines)
             {
                 if (infoTriple.IsValueOf != null)
                     if (infoTriple.IsValueOf.Contains("/track/"))
-                        artistLinks.Add(infoTriple.IsValueOf);
+                        trackLinks.Add(infoTriple.IsValueOf);
             }
-            return artistLinks;
+            return trackLinks;
         }
 
         public JsonLDMaker ExtractArtistMakerInformation(List<Triple> artistInformation)
