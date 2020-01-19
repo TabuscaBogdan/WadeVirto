@@ -165,6 +165,29 @@ namespace ProcessingServer.Services
 
             return artistInfromation;
         }
+        
+        public bool CheckArtistIsTagged(string artistLink, List<string> tagLinks)
+        {
+            SparqlParameterizedString queryString = new SparqlParameterizedString();
+            AddUsualQueryNamespaces(queryString);
+            queryString.CommandText =
+                $"SELECT DISTINCT ?property ?hasValue ?isValueOf WHERE {{ " +
+                $"{{ <{artistLink}> ?property ?hasValue }} UNION " +
+                $"{{ ?isValueOf ?property <{artistLink}> }}" +
+                $"}}ORDER BY(!BOUND(?hasValue)) ?property ?hasValue ?isValueOf LIMIT 20";
+
+            SparqlResultSet results = endpoint.QueryWithResultSet(queryString.ToString());
+
+            foreach(var result in results)
+            {
+                var triple = new Triple(result);
+                if (triple.Property.Contains("/taggedWithTag"))
+                    if (tagLinks.Contains(triple.HasValue))
+                        return true;
+            }
+
+            return false;
+        }
 
         public List<string> ExtractTrackLinks(List<Triple> informationLines)
         {

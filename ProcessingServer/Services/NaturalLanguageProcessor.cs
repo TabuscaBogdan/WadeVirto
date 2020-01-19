@@ -14,6 +14,12 @@ namespace ProcessingServer.Services
         private static string[] MusicGenres = System.IO.File.ReadAllLines(MusicGenerePath);
         private static string[] DislikeWords = new string[] { "not", "unlike", "don't", "shit", "crap", "no", "dislike", "disagree" };
         private static string[] Punctuation = new string[] {".",",","!","?"};
+
+
+        public static readonly string likeArtist = "LikeArtist";
+        public static readonly string notLikeArtist = "!LikeArtist";
+        public static readonly string likeGenere = "LikeMusicTypes";
+        public static readonly string notLikeGenere = "!LikeMusicTypes";
         private static string RemovePunctuation(string word)
         {
             foreach (var punct in Punctuation)
@@ -93,10 +99,10 @@ namespace ProcessingServer.Services
             var preferences = new Dictionary<string, List<string>>();
             var words = text.Split(" ");
 
-            preferences.Add("!LikeMusicTypes",new List<string>());
-            preferences.Add("LikeMusicTypes",new List<string>());
-            preferences.Add("!LikeArtist",new List<string>());
-            preferences.Add("LikeArtist",new List<string>());
+            preferences.Add(notLikeGenere,new List<string>());
+            preferences.Add(likeGenere,new List<string>());
+            preferences.Add(notLikeArtist,new List<string>());
+            preferences.Add(likeArtist,new List<string>());
 
             for (int index = 0; index < words.Length; index++)
             {
@@ -105,9 +111,9 @@ namespace ProcessingServer.Services
                 if (word != null)
                 {
                     if (CheckDislike(index, words))
-                        preferences["!LikeArtist"].Add(word);
+                        preferences[notLikeArtist].Add(word);
                     else
-                        preferences["LikeArtist"].Add(word);
+                        preferences[likeArtist].Add(word);
                     index += nameLen;
                 }
             }
@@ -118,9 +124,9 @@ namespace ProcessingServer.Services
                 {
                     int finding = text.IndexOf(genre);
                     if(CheckDislike(finding, text))
-                        preferences["!LikeMusicTypes"].Add(genre);
+                        preferences[notLikeGenere].Add(genre);
                     else
-                        preferences["LikeMusicTypes"].Add(genre);
+                        preferences[likeGenere].Add(genre);
                 }
             }
 

@@ -34,39 +34,15 @@ namespace ProcessingServer.Controllers
          */
 
 
-        public List<JsonLDSong> SeekSongs([FromBody] string request)
+        public SongList SeekSongs([FromBody] string request)
         {
             var songs = new List<JsonLDSong>();
-
             var preferencesTask = NaturalLanguageProcessor.InterpretPreferences(request).GetAwaiter().GetResult();
+            var seeker = new SongSeeker();
 
-            //TODO Work on this interogator!!!
-            var sparqlInterogator = new SPARQLInterogator();
+            var songList = seeker.SeekSongsBasedOnPreferences(preferencesTask);
 
-            var artists = sparqlInterogator.GetArtistLinks(preferencesTask["LikeArtist"]);
-            //var tags = sparqlInterogator.GetTagLinks(preferencesTask["LikeMusicTypes"]);
-            //var tagInfo = sparqlInterogator.GetTagInformation(tags[0]);
-            foreach(var artistLink in artists)
-            {
-                var info = sparqlInterogator.GetArtistInformation(artistLink);
-                var maker = sparqlInterogator.ExtractArtistMakerInformation(info);
-                var trackLinks = sparqlInterogator.ExtractTrackLinks(info);
-                foreach(var trackLink in trackLinks)
-                {
-                    var trackInfo = sparqlInterogator.GetTrackInformation(trackLink);
-                    var songLD = sparqlInterogator.ExtractSongInformation(trackInfo, maker);
-                    songs.Add(songLD);
-                }
-                
-            }
-
-            //var trackInfo = sparqlInterogator.GetTrackInformation("http://dbtune.org/musicbrainz/resource/track/ae9c96ed-1e5f-49fb-86f0-0cf4df72dddc");
-            //var songLD = sparqlInterogator.ExtractSongInformation(trackInfo);
-            //songs.Add(song1);
-            //songs.Add(songLD);
-
-            
-            return songs;
+            return songList;
         }
     }
 }

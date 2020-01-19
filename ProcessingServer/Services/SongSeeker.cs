@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProcessingServer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace ProcessingServer.Services
 {
     public class SongSeeker
     {
-        Random random;
+        private Random random;
         public SongSeeker()
         {
             random = new Random();
@@ -39,6 +40,67 @@ namespace ProcessingServer.Services
             }
 
             return pickedElements;
+        }
+        private List<JsonLDSong> GetArtistSongs(SPARQLInterogator sparqlInterogator,List<string> artists,int songsPerCategory=3)
+        {
+            var chosenSongs = new List<JsonLDSong>();
+            foreach (var artistLink in artists)
+            {
+                var artistInfo = sparqlInterogator.GetArtistInformation(artistLink);
+
+                var makerInfo = sparqlInterogator.ExtractArtistMakerInformation(artistInfo);
+                var trackLinks = sparqlInterogator.ExtractTrackLinks(artistInfo);
+
+                var chosenTracks = Pick(trackLinks, songsPerCategory);
+
+                foreach (var trackLink in chosenTracks)
+                {
+                    var trackInfo = sparqlInterogator.GetTrackInformation(trackLink);
+                    var songLD = sparqlInterogator.ExtractSongInformation(trackInfo, makerInfo);
+                    chosenSongs.Add(songLD);
+                }
+
+            }
+            return chosenSongs;
+        }
+
+        public SongList SeekSongsBasedOnPreferences(Dictionary<string,List<string>> preferences, int songsPerCategory=3)
+        {
+            var chosenSongs = new List<JsonLDSong>();
+
+            var sparqlInterogator = new SPARQLInterogator();
+
+            var artists = sparqlInterogator.GetArtistLinks(preferences[NaturalLanguageProcessor.likeArtist]);
+            var badArtists = sparqlInterogator.GetArtistLinks(preferences[NaturalLanguageProcessor.notLikeArtist]);
+
+            var tagLinks = sparqlInterogator.GetTagLinks(preferences[NaturalLanguageProcessor.likeGenere]);
+            var badTagLinks = sparqlInterogator.GetTagLinks(preferences[NaturalLanguageProcessor.notLikeGenere]);
+
+            chosenSongs.AddRange(GetArtistSongs(sparqlInterogator, artists, songsPerCategory));
+            
+
+            foreach(var tagLink in tagLinks)
+            {
+                var tagInfo = sparqlInterogator.GetTagInformation(tagLink);
+                var taggedArtistLinks = sparqlInterogator.ExtractArtistLinks(tagInfo);
+                var chosenArtists = Pick(taggedArtistLinks, songsPerCategory);
+
+                var filteredArtistsLinks = new List<string>();
+                foreach(var chosenArtist in chosenArtists)
+                {
+                    if (!badArtists.Contains(chosenArtist))
+                        if (!sparqlInterogator.CheckArtistIsTagged(chosenArtist, badTagLinks))
+                            filteredArtistsLinks.Add(chosenArtist);
+                }
+
+                chosenSongs.AddRange(GetArtistSongs(sparqlInterogator, filteredArtistsLinks, songsPerCategory));
+            }
+
+            SongList songList = new SongList();
+            songList.Songs = chosenSongs;
+            songList.ListName = DateTime.Now.ToString() + " Querry List";
+
+            return songList;
         }
 
 
