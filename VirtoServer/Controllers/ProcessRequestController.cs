@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserDataManager.DbObjects;
@@ -71,7 +73,7 @@ namespace VirtoServer.Controllers
         }
         
         [HttpPost("[action]")]
-        public List<JsonLDSong> SongsSearch(string token,[FromBody] string request)
+        public SongList SongsSearch(string token,[FromBody] string request)
         {
             string email;
             var loginToken = new LoginTokenModel
@@ -90,38 +92,20 @@ namespace VirtoServer.Controllers
                     var result = processTask.Result;
                     if(result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<List<JsonLDSong>>();
+                        var readTask = result.Content.ReadAsAsync<SongList>();
                         readTask.Wait();
                         var songs = readTask.Result;
                         return songs;
                     }
-                    return new List<JsonLDSong>();
+                    return new SongList();
                 }
             }
             else
             {
-                return new List<JsonLDSong>();
+                StatusCode(403);
+                return null;
             }
         }
-        //[HttpPost("[action]")]
-        //public IList<JsonLDSong> ProcessRequest(string username,[FromBody] string request)
-        //{
-        //    var songs = new List<JsonLDSong>();
-        //    var song1 = new JsonLDSong
-        //    {
-        //        id = "http://example.org/#track1",
-        //        type = "mo:Track",
-        //        dcTitle = "Turnover",
-        //        foafMaker = new JsonLDMaker
-        //        {
-        //            id = "http://musicbrainz.org/artist/233fc3f3-6de2-465c-985e-e721dbabbace#_",
-        //            type = "mo:MusicGroup",
-        //            foafName = "Fugazi"
-        //        }
-        //    };
-        //    songs.Add(song1);
-        //    return songs;
-        //}
 
     }
 }

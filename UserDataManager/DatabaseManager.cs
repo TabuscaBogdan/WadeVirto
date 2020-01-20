@@ -2,6 +2,7 @@
 using FireSharp.Response;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserDataManager.DbObjects;
@@ -84,6 +85,7 @@ namespace UserDataManager
         public async Task<bool> SaveList(string email, SongList songs)
         {
             email = BadCharacterTrim(email);
+            
             SetResponse setResponse = await client.SetAsync($"{userPath}{email}/Lists/{songs.ListName}", songs);
             var result = setResponse.ResultAs<SongList>();
             if(result!=null)
@@ -96,6 +98,21 @@ namespace UserDataManager
             email = BadCharacterTrim(email);
             FirebaseResponse response = await client.GetAsync($"{userPath}{email}/Lists");
             var result = response.ResultAs<Dictionary<string, SongList>>();
+            return result;
+        }
+
+        public async Task<List<string>> GetListNames(string email)
+        {
+            var lists =await GetLists(email);
+            var listNames = lists.Keys.ToList();
+            return listNames;
+        }
+
+        public async Task<SongList> GetList(string email, string listName)
+        {
+            email = BadCharacterTrim(email);
+            FirebaseResponse response = await client.GetAsync($"{userPath}{email}/Lists/{listName}");
+            var result = response.ResultAs<SongList>();
             return result;
         }
     }

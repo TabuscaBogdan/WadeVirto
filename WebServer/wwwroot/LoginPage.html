@@ -1,28 +1,34 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="js/accordian.pack.js"></script>
 </head>
 <body>
-    <main style="width: 100vw; min-height: 500px" class="main__content">
-        <div class="main__section--middle">
-            <h1>Login:</h1><br>
-            <form name="loginForm">
-                <label>Email:</label><br>
-                <input type="text"><br>
-                <label>Password:</label><br>
-                <input type="password"><br>
-            </form>
-            <button onclick="SendLogin()">Register!</button>
+<div id="logo">
+    <h1>virto music seeker</h1>
+</div>
+<div id="basic-accordian">
+    <div id="test4-content">
+        <div class="accordion_child">
+            <p>Please login to continue further to the site:</p>
+            <div class="form_settings">
+                    <form name="loginForm">
+                        <label>Email:</label><br>
+                        <input type="text"><br>
+                        <label>Password:</label><br>
+                        <input type="password"><br>
+                    </form>
+                <button onclick="SendLogin()">Register!</button>
+                </div>
         </div>
-
-    </main>
+    </div>
+</div>
+<div id="footer">
+    <p>Only on Virto!</p>
+</div>
 </body>
-<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
 <script src="/js/Login.js"></script>
 </html>

@@ -1,5 +1,5 @@
 ﻿async function LoginUser(jobject) {
-    const response = await fetch('https://localhost:44316/api/Authentication/register', {
+    const response = await fetch('https://localhost:44316/api/Authentication/Login', {
         method: 'POST',
         body: jobject,
         headers: {
