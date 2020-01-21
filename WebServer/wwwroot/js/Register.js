@@ -21,7 +21,6 @@ async function SendRegistration() {
     if (jbody["Password"] === jbody["Re-Password"]) {
         jbody = JSON.stringify(jbody);
         var response = await RegisterUser(jbody);
-        console.log(response);
     } else {
         window.alert("Passwords do not match!");
     }

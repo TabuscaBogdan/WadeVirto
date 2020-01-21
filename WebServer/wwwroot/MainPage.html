@@ -5,9 +5,11 @@
     <title>Main</title>
     <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
     <script type="text/javascript" src="js/accordian.pack.js"></script>
+    <script type="text/javascript" src="js/Management.js"></script>
 </head>
-<body onload="new Accordian('basic-accordian',5,'header_highlight');">
-    <div id="logo"><h1>virto music seeker</h1></div>
+<body onload="new Accordian('basic-accordian', 5, 'header_highlight'); manageAccount();">
+<div id="logo"><h1>virto music seeker</h1></div>
+<button id="AccManagement" class="accBtn" onclick="SendLogin()">Account</button>
     <div id="basic-accordian">
         <div id="test-header" class="accordion_headings header_highlight">Home</div>
         <div id="test-content">

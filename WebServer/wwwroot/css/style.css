@@ -223,3 +223,14 @@ table tr td
 { background: #E5E5DB;
   color: #47433F;
   border-top: 1px solid #FFF;}
+
+.accBtn
+{ font: 100% arial; 
+    border: 0; 
+    width: auto; 
+    margin: 0 0 0 0; 
+    height: 33px;
+    padding: 20px 25px 23px 15px;
+    cursor: pointer; 
+    background: #3B3B3B; 
+    color: #FFF;}
