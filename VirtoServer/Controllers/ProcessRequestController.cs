@@ -29,7 +29,7 @@ namespace VirtoServer.Controllers
             return new ServerCapacityModel
             {
                 Loaded = false,
-                ServerName = "Python Processing server 1"
+                ServerName = "Processing server 1"
             };
         }
 
@@ -95,6 +95,7 @@ namespace VirtoServer.Controllers
                         var readTask = result.Content.ReadAsAsync<SongList>();
                         readTask.Wait();
                         var songs = readTask.Result;
+
                         return songs;
                     }
                     return new SongList();

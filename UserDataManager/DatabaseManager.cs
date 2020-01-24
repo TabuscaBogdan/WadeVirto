@@ -27,6 +27,9 @@ namespace UserDataManager
             value = value.Replace("\"", "");
             value = value.Replace(".", "");
             value = value.Replace("@", "");
+            value = value.Replace(":", "");
+            value = value.Replace(";", "");
+            value = value.Replace(" ", "");
             return value;
         }
 
@@ -86,7 +89,7 @@ namespace UserDataManager
         {
             email = BadCharacterTrim(email);
             
-            SetResponse setResponse = await client.SetAsync($"{userPath}{email}/Lists/{songs.ListName}", songs);
+            SetResponse setResponse = await client.SetAsync($"{userPath}{email}/Lists/{BadCharacterTrim(songs.ListName)}", songs);
             var result = setResponse.ResultAs<SongList>();
             if(result!=null)
                 return true;
