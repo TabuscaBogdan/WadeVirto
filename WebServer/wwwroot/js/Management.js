@@ -20,9 +20,20 @@ function showJsonData() {
     //console.log(element.data);
 }
 
-function CreateSongsTable(songs) {
+//---------------------------------------------------------
+function AddElementToList(element,listId) {
+
+    var targetTable = document.getElementById(listId);
+    var parentList = element.parentElement;
+    parentList.removeChild(element);
+    targetTable.appendChild(element);
+}
+//---------------------------------------------------------
+function CreateSongsTable(songs,ids) {
     var table = document.createElement('table');
-    table.style = "width:100%; border-spacing:0;"
+    table.style = "width:100%; border-spacing:0;";
+    table.id = "table" + ids;
+
 
     var table_header = document.createElement('tr');
 
@@ -42,13 +53,26 @@ function CreateSongsTable(songs) {
     table_header_desc4.innerHTML = "Link: "
     table_header.appendChild(table_header_desc4);
 
+    var table_header_desc5 = document.createElement('th');
+    table_header_desc5.innerHTML = "Add To List:"
+    table_header.appendChild(table_header_desc5);
+
+    var table_header_desc6 = document.createElement('th');
+    table_header_desc6.innerHTML = "Click To Add:"
+    table_header.appendChild(table_header_desc6);
+
     table.appendChild(table_header);
 
+    index = 0;
     for (song in songs) {
 
         var sng = songs[song];
 
         var table_content = document.createElement('tr');
+        table_content.id = "tr" + ids + index;
+        index = index + 1;
+
+        
 
         var table_content_desc1 = document.createElement('td');
         table_content_desc1.innerHTML = sng["dcTitle"];
@@ -73,6 +97,38 @@ function CreateSongsTable(songs) {
         table_content_desc4.appendChild(songLink);
         table_content.appendChild(table_content_desc4);
 
+
+        //--------------------List Select-------------------------
+        var table_content_list = document.createElement('select');
+        var tableLists = document.getElementsByTagName('table');
+        for (tbl in tableLists) {
+            try {
+                var op = document.createElement('option');
+                op.value = tableLists[tbl].id;
+                op.innerHTML = tableLists[tbl].id.substr(5);
+                table_content_list.appendChild(op);
+            }
+            catch (err) {
+                op.innerHTML = "Not Available";
+            }
+            
+        }
+
+        var table_content_desc5 = document.createElement('td');
+        table_content_desc5.appendChild(table_content_list);
+        table_content.appendChild(table_content_desc5);
+        //---------------------------Button----------------------
+        var table_content_desc6 = document.createElement('td');
+        var addBtn = document.createElement('button');
+        addBtn.className = "accBtn";
+        addBtn.innerHTML = "Add";
+        addBtn.onclick = function () { AddElementToList(table_content, table_content_list.value); };
+
+        table_content_desc6.appendChild(addBtn);
+
+        table_content.appendChild(table_content_desc6);
+
+        //-------------------------------------------------------
         table_content.data = sng;
 
         table.appendChild(table_content);
@@ -98,7 +154,8 @@ function RenderLists(songLists) {
         header_node.innerHTML = "Song List:";
         content_child_node.appendChild(header_node);
 
-        var renderedTable = CreateSongsTable(songs);
+        var renderedTable = CreateSongsTable(songs, key);
+
         content_child_node.appendChild(renderedTable);
         
         //----
