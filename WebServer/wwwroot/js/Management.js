@@ -21,20 +21,15 @@ function showJsonData() {
 }
 
 //---------------------------------------------------------
-function AddElementToList(element,listId) {
-
+function AddElementToList(element, sibling) {
+    var listId = sibling.childNodes[0].value;
     var targetTable = document.getElementById(listId);
     var parentList = element.parentElement;
     parentList.removeChild(element);
     targetTable.appendChild(element);
 }
-//---------------------------------------------------------
-function CreateSongsTable(songs,ids) {
-    var table = document.createElement('table');
-    table.style = "width:100%; border-spacing:0;";
-    table.id = "table" + ids;
 
-
+function CreateTableHeader() {
     var table_header = document.createElement('tr');
 
     var table_header_desc1 = document.createElement('th');
@@ -60,6 +55,59 @@ function CreateSongsTable(songs,ids) {
     var table_header_desc6 = document.createElement('th');
     table_header_desc6.innerHTML = "Click To Add:"
     table_header.appendChild(table_header_desc6);
+
+    return table_header;
+}
+//---------------------------------------------------------
+function CreateNewSongsTable() {
+    var page = document.getElementById("basic-accordian");
+    //====================================================
+    var listName = document.getElementById("newListName").value;
+    //====================================================
+    var table = document.createElement('table');
+    table.style = "width:100%; border-spacing:0;";
+    table.id = "table" + listName;
+
+    //====================================================
+    var new_list = document.createElement('div');
+    new_list.className = "accordion_headings";
+    new_list.innerHTML = listName;
+    page.appendChild(new_list);
+    //====================================================
+
+    var content_child_node = document.createElement('div');
+    content_child_node.className = "accordion_child";
+
+    var header_node = document.createElement('h1');
+    header_node.innerHTML = "Song List:";
+    content_child_node.appendChild(header_node);
+
+    //------------------------------------------
+    var table_header = CreateTableHeader();
+
+    table.appendChild(table_header);
+
+    content_child_node.appendChild(table);
+
+    var saveBtn = document.createElement('button');
+    saveBtn.innerHTML = "Save List";
+    saveBtn.className = "accBtn";
+    saveBtn.id = "btn" + listName;
+    saveBtn.onclick = function () { SaveList(this); }
+
+    content_child_node.appendChild(saveBtn);
+    //----
+    
+    page.appendChild(content_child_node);
+}
+
+function CreateSongsTable(songs,ids) {
+    var table = document.createElement('table');
+    table.style = "width:100%; border-spacing:0;";
+    table.id = "table" + ids;
+
+
+    var table_header = CreateTableHeader();
 
     table.appendChild(table_header);
 
@@ -122,7 +170,7 @@ function CreateSongsTable(songs,ids) {
         var addBtn = document.createElement('button');
         addBtn.className = "accBtn";
         addBtn.innerHTML = "Add";
-        addBtn.onclick = function () { AddElementToList(table_content, table_content_list.value); };
+        addBtn.onclick = function () { AddElementToList(this.parentElement.parentElement, this.parentElement.parentElement.childNodes[4]); };
 
         table_content_desc6.appendChild(addBtn);
 
@@ -136,6 +184,40 @@ function CreateSongsTable(songs,ids) {
     return table;
 }
 
+async function SaveList(callingBtn) {
+    var table = document.getElementById('table' + callingBtn.id.substr(3));
+
+    var SongList = {
+        ListName: callingBtn.id.substr(3),
+        Songs: []
+    }
+
+    for (var i = 1, row; row = table.rows[i]; i++) {
+        SongList.Songs.push(row.data);
+    }
+
+    var token = localStorage.getItem("VirtoUserToken");
+
+    var uri = 'https://localhost:44316/api/ProcessRequest/Songs?token=' + token;
+
+    var jSongList = JSON.stringify(SongList);
+    const response = await fetch(uri, {
+        method: 'POST',
+        body: jSongList,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const saveAttempt = await response.json();
+    console.log(saveAttempt);
+    if (saveAttempt === true) {
+        window.alert("List Saved Succesfully!")
+    }
+    else
+        window.alert("List Failed to Save...");
+}
+
 function RenderLists(songLists) {
     var page = document.getElementById("basic-accordian");
     for (var key in songLists) {
@@ -146,7 +228,6 @@ function RenderLists(songLists) {
         var listOfSongs = songLists[key];
         var songs = listOfSongs["songs"];
 
-        var content_node = document.createElement('div');
         var content_child_node = document.createElement('div');
         content_child_node.className = "accordion_child";
 
@@ -157,11 +238,20 @@ function RenderLists(songLists) {
         var renderedTable = CreateSongsTable(songs, key);
 
         content_child_node.appendChild(renderedTable);
-        
+
+
+        var saveBtn = document.createElement('button');
+        saveBtn.innerHTML = "Save List";
+        saveBtn.className = "accBtn";
+        saveBtn.id = "btn" + key;
+        saveBtn.onclick = function () { SaveList(this); }
+
+        content_child_node.appendChild(saveBtn);
         //----
         page.appendChild(new_list);
         page.appendChild(content_child_node);
     }
+
 }
 
 async function GetUserLists() {
@@ -170,4 +260,59 @@ async function GetUserLists() {
     const songLists = await response.json();
     console.log(songLists);
     RenderLists(songLists);
+}
+
+async function RequestSongs() {
+    var text = document.getElementById("SongSearchBox").value;
+    if (text != "") {
+        var token = localStorage.getItem("VirtoUserToken");
+
+        //var otext = { request: text }
+        var jtext = JSON.stringify(text);
+
+        var uri = 'https://localhost:44316/api/ProcessRequest/SongsSearch?token=' + token;
+
+        const response = await fetch(uri, {
+            method: 'POST',
+            body: jtext,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const seekAttempt = await response.json();
+
+        var page = document.getElementById("basic-accordian");
+
+        var new_list = document.createElement('div');
+        new_list.className = "accordion_headings";
+        new_list.innerHTML = seekAttempt["listName"];
+        //do more stuff here
+        var listOfSongs = seekAttempt;
+        var songs = listOfSongs["songs"];
+
+        var content_node = document.createElement('div');
+        var content_child_node = document.createElement('div');
+        content_child_node.className = "accordion_child";
+
+        var header_node = document.createElement('h1');
+        header_node.innerHTML = "Song List:";
+        content_child_node.appendChild(header_node);
+
+        var renderedTable = CreateSongsTable(songs, seekAttempt["listName"]);
+
+        content_child_node.appendChild(renderedTable);
+
+
+        var saveBtn = document.createElement('button');
+        saveBtn.innerHTML = "Save List";
+        saveBtn.className = "accBtn";
+        saveBtn.id = "btn" + seekAttempt["listName"];
+        saveBtn.onclick = function () { SaveList(this); }
+
+        content_child_node.appendChild(saveBtn);
+        //----
+        page.appendChild(new_list);
+        page.appendChild(content_child_node);
+    }
 }

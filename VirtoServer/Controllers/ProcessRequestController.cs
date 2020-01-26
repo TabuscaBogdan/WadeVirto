@@ -34,13 +34,13 @@ namespace VirtoServer.Controllers
         }
 
         [HttpPost("[action]")]
-        public bool Songs(string token, DateTime tokenTime, SongList songs)
+        public bool Songs(string token, SongList songs)
         {
             string email;
             var loginToken = new LoginTokenModel
             {
                 Token = token,
-                Timestamp = tokenTime
+                Timestamp = DateTime.Now
             };
             if (CredentialKeeper.IsTokenCached(loginToken))
             {
