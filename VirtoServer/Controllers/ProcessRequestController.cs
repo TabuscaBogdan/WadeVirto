@@ -87,6 +87,7 @@ namespace VirtoServer.Controllers
                 using(var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(processingServerAddress);
+                    client.Timeout = TimeSpan.FromSeconds(300);
                     var processTask = client.PostAsJsonAsync<string>("api/Processing/SeekSongs", request);
                     processTask.Wait();
                     var result = processTask.Result;
