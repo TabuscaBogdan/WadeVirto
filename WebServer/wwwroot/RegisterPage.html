@@ -1,41 +1,36 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>RegisterPage</title>
-    <link href="css/Bootstrapcss/bootstrap.css" rel="stylesheet">
-    <link href="css/Bootstrapcss/bootstrap-reboot.css">
-    <link href="css/Bootstrapcss/bootstrap-grid.css">
-    <link href="css/Bootstrapcss/font-awesome.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/NewCss/navbar.css" rel="stylesheet">
-    <link href="css/NewCss/footer-bootstrap-extensions.css" rel="stylesheet">
-    <link href="css/NewCss/sidemenu.css" rel="stylesheet">
-    <link href="css/NewCss/main-content.css" rel="stylesheet">
-    <link href="css/NewCss/sidebar.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Register</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="js/accordian.pack.js"></script>
 </head>
 <body>
-<main style="width: 100vw; min-height: 500px" class="main__content">
-    <div class="main__section--middle">
-        <h1>Register:</h1>
-        <form name="registerForm">
-            <label>Username:</label><br>
-            <input type="text"><br>
-            <label>Email:</label><br>
-            <input type="text"><br>
-            <label>Password:</label><br>
-            <input type="password"><br>
-            <label>Re-type Password:</label><br>
-            <input type="password"><br>
-            <label>Phone:</label><br>
-            <input type="text"><br>
-            <label>Role:</label><br>
-            <input type="text"><br><br>
-        </form>
-        <button onclick="SendRegistry()">Register!</button>
+    <div id="logo">
+        <h1>virto music seeker</h1>
     </div>
-
-</main>
+    <div id="basic-accordian">
+        <div id="test4-content">
+            <div class="accordion_child">
+                <p>Please register to use the site:</p>
+                <div class="form_settings">
+                    <form name="registerForm">
+                        <label>Email:</label><br>
+                        <input type="text"><br>
+                        <label>Password:</label><br>
+                        <input type="password"><br>
+                        <label>Re-type Password:</label><br>
+                        <input type="password"><br>
+                    </form>
+                    <button class="submit" onclick="SendRegistration()">Register!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <p>Only on Virto!</p>
+    </div>
 </body>
-<script src="../wwwroot/js/Register.js"></script>
+<script src="/js/Register.js"></script>
 </html>

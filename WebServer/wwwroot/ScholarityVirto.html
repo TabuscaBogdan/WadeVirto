@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Scholarly Article</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="/css/scholmd-heuristically-latest.css" rel="stylesheet" type="text/css" media="screen" />
+
+</head>
+<body prefix="schema: http://schema.org hir:Main.html">
+<article id="how" typeof="schema:ScholarlyArticle" resource="#">
+    <h1>Online Music Recommendation Toll</h1>
+    <div id="descr">
+        <section>
+            <section typeof="sa:Abstract" id="abstract" role="doc-abstract">
+                <h2>Abstract</h2>
+                <p>
+                    This site represents an online tool dedicated to the discovery of various music related information.
+                    The site is based on the premise that the song is the basis of all music and thus the aim of this
+                    tool is to search for new songs based on user given preferences and to give new insights to the user
+                    about the record's authors, genera, type, history and associations.
+                </p>
+            </section>
+
+            <section>
+                <h2>Introduction</h2>
+                <p>
+                    In today's society the main contact people have with music is through radio, media, and social
+                    media too some extent. People usually listen to what is popular at the moment and to what their
+                    friends think is popular. This as one can imagine has lead up to a stagnation in music culture,
+                    not because new and interesting songs aren't made, in fact more songs than ever appear every day
+                    but the range of musical repertoire an average person listen's to has shrunk considerably. Many
+                    people nowadays listen to music via an online streaming service like Spotify or YouTube. These
+                    platforms alleviate the problem somewhat by introducing recommendation algorithms that open up
+                    users to other new songs and artists, yet sadly these algorithms are sometimes hit or miss
+                    because the recommendations are given based on what the streaming service thinks you want to
+                    listen to and not on what you would like to listen too.
+                </p>
+                <p>
+                    This online tool is aimed at enlarging the musical repertoire of a person by giving him or her
+                    recommendations on music, yet unlike a streaming service's algorithm that bases its suggestions
+                    only on your previous search history, this web application will search for new music based on
+                    likes and wants directly specified by the end user while taking into consideration his or hers
+                    previous music selection.
+                </p>
+                <p>
+                    The rest of this document will be aimed at describing the application both from a user's point of
+                    view, as well as provide implementation details useful to developers that would want to manage
+                    or expand the online tool.
+                </p>
+            </section>
+
+            <section id="User-flow">
+                <h2>User flow</h2>
+                <p>
+                    From a user's standpoint he or she will be able to do a number of actions, each one with an associated
+                    page. The following sub chapters will be placed in order and describe a general user flow.
+                </p>
+                <section id="LoginRegister">
+                    <h3><span>1.</span> Login\Register</h3>
+                    <p>
+                        To gain access to any utility from the music recommendation tool a user must first register or
+                        login to the site. To do this the user will be prompted to enter his or hers email and password.
+                        If the authentication succeeds the user will remain logged in until a certain time expires or the
+                        logout option is pressed. In the logged in state the user will now be granted access to the tool's
+                        utilities.
+                    </p>
+                </section>
+
+                <section id="Playlist">
+                    <h3><span>2.</span> Playlist Management</h3>
+                    <p>
+                        A logged in user will now be able to see his/hers available playlists. On this page they can
+                        create a new playlist, delete a playlist or select a playlist to begin the process of searching
+                        for new songs to add to the respective list or they can chose to remove songs from it. Another
+                        option that is now available to the user on this page is the ability to share a selected playlist
+                        with friends via an online social platform.
+                    </p>
+                </section>
+
+                <section id="Music Searching">
+                    <h3><span>3.</span> Music Searching\Playlist Editing</h3>
+                    <p>
+                        On this page the user will be presented with a text-box were he\she will be able to type a
+                        request in normal natural language (preferably in english) in which various statements and
+                        suggestions can be made regarding the songs and musics they want to receive. These requests
+                        will be then sent to the server which will then process them and provide the user with a list
+                        of songs accompanied by various information regarding them, like their artists, history genera
+                        and more. A user can then chose to add these songs to their playlist or they can chose to discard
+                        the results and send over a new request.
+                    </p>
+                </section>
+            </section>
+
+            <section id="DataFlow">
+                <h2>Server Data Flow</h2>
+                <section id="WebServer">
+                    <h3><span>1.</span>.Net Core Web Server</h3>
+                    <p>
+                        The visual part of the application will be handled by a MVC server written in .NET Core. This part
+                        will be responsible with delivering the web pages, scripts, forms and more to the end user. Furthermore
+                        the server will also handle the authentication part for users that only register with an account made
+                        specifically for the use of the online tool. For users who chose to log in with another account, such as
+                        a google account or facebook, the server will only check for the user's validation token, before
+                        processing the request. The last main job of the web server will be to collect user inputs, organise
+                        them and then make specific calls to the necessary end points exposed by a .Net Core Processing Server.
+                        Once the awaited response arrives the web server will pass it to the user in a more readable and
+                        understandable manner and once the user decides to save his or her playlist, the changes will be
+                        recorded in a NoSQL Database available to the server in a RDF compatible format.
+                        Note:The changes saved by an user will influence further search results in the selected playlist.
+                    </p>
+                </section>
+                <section id="ProcessorServer">
+                    <h3><span>2.</span>Processor Server</h3>
+                    <p>
+                        The main part of the online tool is that of the processor server. Here end points are exposed for
+                        the web server to access. Data received on those end points will be processed from natural language
+                        into machine data and a list of search patterns will be formed. The server will then proceed to
+                        further call upon SPARQL endpoints to gather data based on the search parameters given. Once the
+                        queries have returned the data, the processing application will then proceed to comb through for
+                        the most relevant information based on the context given and then package that data to be sent
+                        back to the web server.
+                        Note: Due to the high amount of strain and the long duration of the SPARQL search queries this
+                        server will likely be replicated.
+                    </p>
+                </section>
+            </section>
+
+            <section id="Models">
+                <h2>Data Models</h2>
+                <p>
+                    In this application we hope to use the RDF data format for storing our data about different tracks that were
+                    stored in a playlist. While the playlist itself will be structured as standard json data in our database, the
+                    information and the tracks themselves contained within the list will be stored using a JSON-LD format provided
+                    by <a  href="http://musicontology.com/docs/getting-started.html">Music Ontology Site</a>. This format will
+                    help us store and pass data in a much more convenient manner.<br>
+                    Example of a song model in JSON-LD:
+                    <pre>
+                    <code>
+{
+  "@id": "http://example.org/#track1",
+  "@type": "mo:Track",
+  "dc:title": "Turnover",
+  "foaf:maker": {
+    "@id": "http://musicbrainz.org/artist/233fc3f3-6de2-465c-985e-e721dbabbace#_",
+    "@type": "mo:MusicGroup",
+    "foaf:name": "Fugazi"
+  }
+}
+                    </code>
+                    </pre>
+                </p>
+            </section>
+            <section id="Technology">
+                <h2>Technology Used</h2>
+                <section id=".NetCore">
+                    <h3><span>1.</span>C# Core Technology</h3>
+                    <p>
+                        The decision to use the .Net Core technology was made based on the following points:
+                        <ul>
+                            <li>Able to handle a large number of requests.</li>
+                            <li>Ease of content publication.</li>
+                            <li>The ability to run on any machine.</li>
+                            <li>Ease integration with databases & cloud services.</li>
+                        </ul>
+                    </p>
+                </section>
+                <section id="Core">
+                    <h3><span>1.</span>C# Core Technology</h3>
+                    <p>
+                        The decision to use the .Net Core for the processor server was made based on the following points:
+                    <ul>
+                        <li>Efficiency of large data manipulations.</li>
+                        <li>Microsoft mantained language that is also open source</li>
+                        <li>The ability to run on any machine.</li>
+                        <li>Ease of use.</li>
+                    </ul>
+                    </p>
+                </section>
+
+            </section>
+            <br>
+
+        </section>
+    </div>
+</article>
+</body>
+</html>
